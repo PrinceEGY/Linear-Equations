@@ -11,6 +11,7 @@ class LinearEquation:
         self._infin_sol = False
         self.__sub_script = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 
+    # Method For Formatting The Matrix Printing
     def print_matrix(self):
         for row in range(self._no_rows):
             print('[', end="")
@@ -26,6 +27,7 @@ class LinearEquation:
             print(']')
         print()
 
+    # Method For Setting Up The Matrix Elements, It Can Get The Matrix As An Argument Or Get The Input From User
     def set_matrix(self, matrix=None, no_rows=0, no_colns=0):
         if matrix:
             self._matrix = matrix
@@ -48,6 +50,7 @@ class LinearEquation:
             # // Checking The Inputs //
             self.__check_inputs()
 
+    # Method For Verification and Modification Of Current Matrix Elements
     def __check_inputs(self, flag=1):
         if flag == 1:
             print("Your Current Matrix Looks Like:")
@@ -62,6 +65,7 @@ class LinearEquation:
         elif op != 2:
             self.__check_inputs(2)
 
+    # Method For Start The Elimination And Getting The Results
     def solve(self):
         choice = int(input(
             "For 'Gaussian Elimination' type '1', For 'Gauss-Jordan Elimination' type '2' : "))
@@ -81,6 +85,7 @@ class LinearEquation:
             print("Wrong Entry, Please Try Again")
             self.solve()
 
+    # Method For Checking Whether To Solve Another Equation or Exit
     def __exit_check(self):
         op = int(input("Type '1' For Solving Another Equation, '2' For Exit : "))
         if op == 1:
@@ -90,6 +95,7 @@ class LinearEquation:
         else:
             exit()
 
+    # Method For Eliminating The Matrix To 'Row-Echelon' Form
     def eliminate(self):
         coln = 0
         is_lead = False
@@ -148,6 +154,7 @@ class LinearEquation:
             coln += 1
             is_lead = False
 
+    # Method for Applying 'Gauss-Jordan' Step
     def gauss_jordan(self):
         print('='*50)
         print("Gauss-Jordan Step:")
@@ -161,6 +168,7 @@ class LinearEquation:
                         self._matrix[i][j] -= temp*self._matrix[k][j]
                     self.print_matrix()
 
+    # Method for Applying Back-Substitute On The Matrix
     def back_substitute(self):
         print('='*50)
         print("Back Substitute:")
@@ -197,6 +205,7 @@ class LinearEquation:
                             f"x{coln+1}".translate(self.__sub_script)
             print(ans)
         print('-'*50)
+        # Printing Result After Each Susbtitution
         for i in range(len(self._matrix)-2, -1, -1):
             ans = f"x{i+1} = ".translate(
                 self.__sub_script)+f"{Fr(self._matrix[i][self._no_colns-1]).limit_denominator(25000)} "
@@ -210,6 +219,7 @@ class LinearEquation:
             ans += f" = {Fr(self._matrix[i][self._no_colns-1]).limit_denominator(25000)}"
             print(ans)
 
+    # Method for Exctracting And Printing The 'Solution Set'
     def get_result(self):
         print('='*50)
         print("Answer:")
@@ -250,3 +260,10 @@ class LinearEquation:
                             f"x{coln+1}".translate(self.__sub_script)
             print(ans)
         print()
+
+
+print("==== Linear Equation Elimination ====".center(50, '='))
+print("==== Made By: Ahmed Mohsen (PrinceEGY) ====".center(50, '='))
+le = LinearEquation()
+le.set_matrix()
+le.solve()
