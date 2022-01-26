@@ -1,5 +1,7 @@
 # بسم الله الرحمن الرحيم
+# Printing the Floating Numbers as Fractional Numbers
 from fractions import Fraction as Fr
+# Solving Python's Floating number issue \\ 1.2-1 = 0.19999999999999996 instead of 0.2
 from decimal import Decimal as D
 
 
@@ -11,7 +13,7 @@ class LinearEquation:
         self._infin_sol = False
         self.__sub_script = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 
-    # Formatting The Matrix Printing
+    # Formatting The Matrix Printing, Printing The Matrix As 'Augmented Matrix' Form
     def print_matrix(self):
         for row in range(self._no_rows):
             print('[', end="")
@@ -27,7 +29,7 @@ class LinearEquation:
             print(']')
         print()
 
-    # Setting Up The Matrix Elements, It Can Get The Matrix As An Argument Or Get The Input From User
+    # Setting Up The Matrix Elements, It Can Get The Matrix As An Argument Or Get The Data As Input From User
     def set_matrix(self, matrix=None, no_rows=0, no_colns=0):
         if matrix:
             self._matrix = matrix
@@ -49,23 +51,8 @@ class LinearEquation:
             print('='*50)
             # // Checking The Inputs //
             self.__check_inputs()
+            # Start The Elimination And Getting The Results
 
-    # Verification and Modification Of Current Matrix Elements
-    def __check_inputs(self, flag=1):
-        if flag == 1:
-            print("Your Current Matrix Looks Like:")
-            self.print_matrix()
-        op = int(input("Type '1' For Editing, '2' For Elimination: "))
-        if op == 1:
-            row = int(input("Row Number: "))
-            coln = int(input("Column Number: "))
-            self._matrix[row-1][coln-1] = D(input("New Value: "))
-            print('='*50)
-            self.__check_inputs()
-        elif op != 2:
-            self.__check_inputs(2)
-
-    # Start The Elimination And Getting The Results
     def solve(self):
         choice = int(input(
             "For 'Gaussian Elimination' type '1', For 'Gauss-Jordan Elimination' type '2' : "))
@@ -85,17 +72,11 @@ class LinearEquation:
             print("Wrong Entry, Please Try Again")
             self.solve()
 
-    # Checking Whether To Solve Another Equation or Exit
-    def __exit_check(self):
-        op = int(input("Type '1' For Solving Another Equation, '2' For Exit : "))
-        if op == 1:
-            self._infin_sol = False
-            self.set_matrix()
-            self.solve()
-        else:
-            exit()
-
     # Eliminating The Matrix To 'Row-Echelon' Form
+    # The Idea is To Move Through-out The Matrix Row by Row --> Here 'row' variable is used as a pointer for this job
+    # Then, Ignoring All Rows Above The current row, Start Searching For The First Column Suitable For The Algorithm --> 'coln' variable is used as pointer for this job
+    # The Rest Of The algorithm Steps is then Applied To The choosen 'coln'
+    # Repeating This Process For The Whole Matrix
     def eliminate(self):
         coln = 0
         is_lead = False
@@ -116,7 +97,7 @@ class LinearEquation:
             # // Check If No More non-zero Columns Found //
             if not is_lead:
                 if self._matrix[row][self._no_colns-1] == 0 and row == coln and coln != self._no_colns-1:
-                    infin_sol = True
+                    self._infin_sol = True
                 elif self._matrix[row][self._no_colns-1] != 0:
                     print(
                         f"0 ≠ {Fr(self._matrix[row][self._no_colns-1]).limit_denominator(25000)}\nThe System Has No Solution\n")
@@ -167,6 +148,31 @@ class LinearEquation:
                     for j in range(self._no_colns):
                         self._matrix[i][j] -= temp*self._matrix[k][j]
                     self.print_matrix()
+
+    # Verification and Modification Of Current Matrix Elements
+    def __check_inputs(self, flag=1):
+        if flag == 1:
+            print("Your Current Matrix Looks Like:")
+            self.print_matrix()
+        op = int(input("Type '1' For Editing, '2' For Elimination: "))
+        if op == 1:
+            row = int(input("Row Number: "))
+            coln = int(input("Column Number: "))
+            self._matrix[row-1][coln-1] = D(input("New Value: "))
+            print('='*50)
+            self.__check_inputs()
+        elif op != 2:
+            self.__check_inputs(2)
+
+    # Checking Whether To Solve Another Equation or Exit
+    def __exit_check(self):
+        op = int(input("Type '1' For Solving Another Equation, '2' For Exit : "))
+        if op == 1:
+            self._infin_sol = False
+            self.set_matrix()
+            self.solve()
+        else:
+            exit()
 
     # Applying Back-Substitute On The Matrix
     def back_substitute(self):
