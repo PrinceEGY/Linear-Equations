@@ -1,7 +1,7 @@
 # بسم الله الرحمن الرحيم
 # Printing the Floating Numbers as Fractional Numbers
 from fractions import Fraction as Fr
-# Solving Python's Floating number issue \\ 1.2-1 = 0.19999999999999996 instead of 0.2
+# Solving Python's Floating Numbers Issue \\ 1.2-1 = 0.19999999999999996 instead of 0.2
 from decimal import Decimal as D
 
 
